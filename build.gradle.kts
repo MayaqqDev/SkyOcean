@@ -82,6 +82,8 @@ cloche {
             mixins.from("src/mixins/${it.name}")
         }
 
+        accessWideners.from("src/accesswideners/skyocean.accesswidener")
+
         data {
             dependencies { addDependencies(this) }
         }

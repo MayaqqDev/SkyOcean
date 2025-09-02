@@ -1,0 +1,10 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "skyocean:font/full_shadow.png",
+      "ascent": -1
+    }
+
+  ]
+}

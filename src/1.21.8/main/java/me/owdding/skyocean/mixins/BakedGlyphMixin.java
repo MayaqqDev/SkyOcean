@@ -24,19 +24,7 @@ public abstract class BakedGlyphMixin {
     public void onRenderShadow(
         BakedGlyph instance, boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight, Operation<Void> original, @Local(argsOnly = true) BakedGlyph.GlyphInstance glyph
     ) {
-        if (MiscConfig.INSTANCE.getFullTextShadow()) {
-            for(int j = -1; j <= 1; ++j) {
-                for (int k = -1; k <= 1; ++k) {
-                    if (j != 0 || k != 0) {
-                        float xShadowOffset = glyph.shadowOffset() * j;
-                        float yShadowOffset = glyph.shadowOffset() * k;
-                        this.render(italic, glyph.x() + xShadowOffset, glyph.y() + yShadowOffset, 0.0F, pose, buffer, color, bold, packedLight);
-                    }
-                }
-            }
-        } else {
-            original.call(instance, italic, x, y, z, pose, buffer, color, bold, packedLight);
-        }
+        if (!MiscConfig.INSTANCE.getFullTextShadow()) original.call(instance, italic, x, y, z, pose, buffer, color, bold, packedLight);
     }
 
     @WrapOperation(
@@ -46,18 +34,6 @@ public abstract class BakedGlyphMixin {
     public void onRenderShadowBold(
         BakedGlyph instance, boolean italic, float x, float y, float z, Matrix4f pose, VertexConsumer buffer, int color, boolean bold, int packedLight, Operation<Void> original, @Local(argsOnly = true) BakedGlyph.GlyphInstance glyph
     ) {
-        if (MiscConfig.INSTANCE.getFullTextShadow()) {
-            for(int j = -1; j <= 1; ++j) {
-                for (int k = -1; k <= 1; ++k) {
-                    if (j != 0 || k != 0) {
-                        float xShadowOffset = glyph.shadowOffset() * j;
-                        float yShadowOffset = glyph.shadowOffset() * k;
-                        this.render(italic, glyph.x() + glyph.boldOffset() + xShadowOffset, glyph.y() + yShadowOffset, 0.001F, pose, buffer, color, bold, packedLight);
-                    }
-                }
-            }
-        } else {
-            original.call(instance, italic, x, y, z, pose, buffer, color, bold, packedLight);
-        }
+        if (!MiscConfig.INSTANCE.getFullTextShadow()) original.call(instance, italic, x, y, z, pose, buffer, color, bold, packedLight);
     }
 }
