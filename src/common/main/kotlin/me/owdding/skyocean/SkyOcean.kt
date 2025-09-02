@@ -8,14 +8,24 @@ import me.owdding.lib.utils.DataPatcher
 import me.owdding.lib.utils.MeowddingLogger
 import me.owdding.lib.utils.MeowddingUpdateChecker
 import me.owdding.skyocean.config.Config
+import me.owdding.skyocean.features.misc.FullShadowFontSet
 import me.owdding.skyocean.generated.SkyOceanLateInitModules
 import me.owdding.skyocean.generated.SkyOceanModules
 import me.owdding.skyocean.helpers.FakeBlocks
 import me.owdding.skyocean.utils.ChatUtils.sendWithPrefix
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.PreparableReloadListener
+import net.minecraft.server.packs.resources.ReloadableResourceManager
+import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener
 import tech.thatgravyboat.repolib.api.RepoAPI
 import tech.thatgravyboat.skyblockapi.api.SkyBlockAPI
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
@@ -28,6 +38,8 @@ import tech.thatgravyboat.skyblockapi.utils.text.TextColor
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.hover
 import tech.thatgravyboat.skyblockapi.utils.text.TextStyle.url
 import java.net.URI
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executor
 
 @Module
 object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoResolve() {
@@ -63,6 +75,19 @@ object SkyOcean : ClientModInitializer, MeowddingLogger by MeowddingLogger.autoR
         }
 
         FakeBlocks.setup()
+        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(object: IdentifiableResourceReloadListener {
+            override fun getFabricId(): ResourceLocation = id("full_shadow")
+
+            override fun reload(
+                p0: PreparableReloadListener.PreparationBarrier,
+                p1: ResourceManager,
+                p2: Executor,
+                p3: Executor,
+            ): CompletableFuture<Void> {
+                return CompletableFuture.runAsync { McClient.runNextTick { FullShadowFontSet.reload(setOf()) } }
+            }
+
+        })
     }
 
     @Subscription(RepoStatusEvent::class)

@@ -2,6 +2,7 @@ package me.owdding.skyocean.mixins.features;
 
 import com.mojang.blaze3d.font.GlyphInfo;
 import me.owdding.skyocean.SkyOcean;
+import me.owdding.skyocean.features.misc.FullShadowFontSet;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.gui.font.glyphs.BakedGlyph;
@@ -42,7 +43,7 @@ public abstract class FontMixin {
     )
     private void onAddGlyph(int index, Style style, int codepoint, CallbackInfoReturnable<Boolean> info) {
         int shadowColor = getShadowColor(style, getTextColor(style.getColor()));
-        FontSet shadowFontSet = this$0.getFontSet(SkyOcean.INSTANCE.id("full_shadow"));
+        FontSet shadowFontSet = FullShadowFontSet.INSTANCE;
         GlyphInfo glyphInfo = shadowFontSet.getGlyphInfo(codepoint, this$0.filterFishyGlyphs);
         this.addGlyph(new BakedGlyph.GlyphInstance(
                 this.x - 1,

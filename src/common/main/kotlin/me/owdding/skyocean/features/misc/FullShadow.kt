@@ -1,6 +1,10 @@
 package me.owdding.skyocean.features.misc
 
 import com.mojang.blaze3d.platform.NativeImage
+import me.owdding.skyocean.SkyOcean.id
+import net.minecraft.client.gui.font.FontSet
+import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
+import tech.thatgravyboat.skyblockapi.helpers.McClient
 
 fun createFullShadow(image: NativeImage): NativeImage {
     val newImage = NativeImage(image.width + 2, image.height + 2, true)
@@ -24,3 +28,8 @@ fun createFullShadow(image: NativeImage): NativeImage {
     }
     return newImage
 }
+
+object FullShadowFontSet : FontSet(McClient.self.textureManager, id("full_shadow")) {
+
+}
+
